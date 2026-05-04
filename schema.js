@@ -3,8 +3,8 @@ import mongoose from "mongoose"
 const TheftSchema = new mongoose.Schema({
     theft: { type: Boolean, required: true },
 
-    input: Number,
-    output: Number,
+    inCurrent: Number,
+    outCurrent: Number,
     status: { type: String, default: "PENDING" },
 
     poleId: { type: String, default: "P-101"},
