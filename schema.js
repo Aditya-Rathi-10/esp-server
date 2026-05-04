@@ -5,12 +5,16 @@ const TheftSchema = new mongoose.Schema({
 
     input: Number,
     output: Number,
+    status: { type: String, default: "PENDING" },
 
-    poleId: String,
-    poleNumber: Number,
+    poleId: { type: String, default: "P-101"},
+    poleNumber: { type: Number, default: "101"},
 
-    latitude: Number,
-    longitude: Number,
+    address: {type: String, default: "IIITDM Jabalpur"},
+    area: {type: String, default: "Dumna Airport"},
+
+    latitude: { type: Number, default: 23.18 },
+    longitude: { type: Number, default: 79.97 },
 }, {
     timestamps: true
 });

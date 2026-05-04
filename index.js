@@ -25,25 +25,63 @@ app.get("/", (req, res) => {
 
 app.get("/theft-data", async (req, res) => {
     const theftData = await Theft.find({})
-    return res.json({ data: theftData })
+    res.json({ data: theftData })
 })
 
 app.post("/api/data", async (req, res) => {
-    const { theft, input, output, poleId, poleNumber, latitude, longitude } = req.body;
+    const { theft, inCurrent, outCurrent, poleId, poleNumber, address, area, latitude, longitude } = req.body;
     if (theft === 1) {
-        await Theft.create({
-            theft: true,
-            input,
-            output,
-            poleId,
-            poleNumber,
-            latitude,
-            longitude
-        });
-        const data = req.body
-        console.log("data", data)
-        return res.json({ message: "data aa gaya" })
+        try {
+            await Theft.create({
+                theft: true,
+                inCurrent,
+                outCurrent,
+                poleId,
+                poleNumber,
+                address,
+                area,
+                latitude,
+                longitude
+            });
+            const data = req.body
+            console.log("data", data)
+            res.json({ message: "data aa gaya" })
+        } catch (error) {
+            console.error("Theft add error", error);
+            res.status(500).json({ error: "Error adding theft data" });
+        }
     }
+})
+
+app.post("/update-status", async (req, res) => {
+    try {
+        const { poles } = req.body;
+
+        if (!poles || !Array.isArray(poles)) {
+            return res.status(400).json({ error: "Invalid data format." });
+        }
+
+        const updatePromises = poles.map(pole => {
+            return Theft.findByIdAndUpdate(
+                pole.id, 
+                { status: pole.status }, 
+                { new: true }
+            );
+        });
+
+        await Promise.all(updatePromises);
+
+        res.status(200).json({ message: "Statuses successfully updated!" });
+    } catch (error) {
+        console.error("Status Update Error:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
+app.delete("/data", async (req, res) => {
+    await Theft.deleteMany({})
+    res.json({ message: "delete hogaya" })
 })
 
 app.listen(PORT, () => console.log("Server started"))
