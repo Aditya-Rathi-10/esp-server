@@ -11,7 +11,7 @@ const TheftSchema = new mongoose.Schema({
     poleNumber: { type: Number, default: "101"},
 
     address: {type: String, default: "IIITDM Jabalpur"},
-    area: {type: String, default: "Dumna Airport"},
+    area: {type: String, default: "Khamaria"},
 
     latitude: { type: Number, default: 23.18 },
     longitude: { type: Number, default: 79.97 },
